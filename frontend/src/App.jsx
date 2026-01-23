@@ -1,40 +1,52 @@
 import React from "react";
-import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
-import { AuthProvider } from "./context/AuthContext";
-import Sidebar from "./components/Sidebar";
+import {
+  BrowserRouter as Router,
+  Routes,
+  Route,
+  Navigate,
+} from "react-router-dom";
+import { AuthProvider } from "./context/AuthContext.jsx";
+import { ExerciseCompletionProvider } from "./context/ExerciseCompletionContext.jsx";
+import DashboardLayout from "./components/layout/DashboardLayout";
 import Dashboard from "./pages/Dashboard";
 import WorkoutPlan from "./pages/WorkoutPlan";
+import WorkoutTracker from "./pages/WorkoutTracker";
 import FormChecker from "./pages/FormChecker";
 import ProgressAchievements from "./pages/ProgressAchievements";
 import Settings from "./pages/Settings";
+import Login from "./pages/auth/Login";
+import Register from "./pages/auth/Register";
 
 function App() {
   return (
     <AuthProvider>
-      <Router>
-        <div className="flex h-screen bg-gray-50">
-          {/* Sidebar */}
-          <Sidebar />
+      <ExerciseCompletionProvider>
+        <Router>
+          <Routes>
+          {/* Public Routes - will redirect to dashboard if authenticated */}
+          <Route path="/" element={<Navigate to="/dashboard" replace />} />
+          <Route path="/login" element={<Login />} />
+          <Route path="/register" element={<Register />} />
 
-          {/* Main Content */}
-          <div className="flex-1 flex flex-col overflow-hidden">
-            <main className="flex-1 overflow-y-auto p-6 bg-gray-50">
-              <Routes>
-                <Route path="/" element={<Dashboard />} />
-                <Route path="/dashboard" element={<Dashboard />} />
-                <Route path="/workout-plan" element={<WorkoutPlan />} />
-                <Route path="/form-checker" element={<FormChecker />} />
-                <Route
-                  path="/progress-achievements"
-                  element={<ProgressAchievements />}
-                />
-                <Route path="/settings" element={<Settings />} />
-              </Routes>
-            </main>
-          </div>
-        </div>
+          {/* Protected Routes - require authentication */}
+          <Route element={<DashboardLayout />}>
+            <Route path="/dashboard" element={<Dashboard />} />
+            <Route path="/workout-plan" element={<WorkoutPlan />} />
+            <Route path="/workout/:workoutId?" element={<WorkoutTracker />} />
+            <Route path="/form-checker" element={<FormChecker />} />
+            <Route
+              path="/progress-achievements"
+              element={<ProgressAchievements />}
+            />
+            <Route path="/settings" element={<Settings />} />
+          </Route>
+
+          {/* Redirect any unmatched routes */}
+          <Route path="*" element={<Navigate to="/dashboard" replace />} />
+        </Routes>
       </Router>
-    </AuthProvider>
+    </ExerciseCompletionProvider>
+  </AuthProvider>
   );
 }
 

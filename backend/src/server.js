@@ -25,9 +25,19 @@ app.use(express.urlencoded({ extended: true }));
 
 // Import routes
 const authRoutes = require("./routes/authRoutes");
+const workoutRoutes = require("./routes/workoutRoutes");
+const formRoutes = require("./routes/formRoutes");
+const progressRoutes = require("./routes/progressRoutes");
+const achievementRoutes = require("./routes/achievementRoutes");
+const profileRoutes = require("./routes/profileRoutes");
 
 // Routes
 app.use("/api/auth", authRoutes);
+app.use("/api/workouts", workoutRoutes);
+app.use("/api/form-analysis", formRoutes);
+app.use("/api/progress", progressRoutes);
+app.use("/api/achievements", achievementRoutes);
+app.use("/api/profile", profileRoutes);
 
 // Health check endpoint
 

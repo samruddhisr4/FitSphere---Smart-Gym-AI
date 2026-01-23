@@ -104,8 +104,8 @@ const Settings = () => {
   return (
     <div className="space-y-6">
       <div>
-        <h1 className="text-2xl font-bold text-gray-800">Settings</h1>
-        <p className="text-gray-600">Manage your profile and preferences</p>
+        <h1 className="text-2xl font-bold text-white">Settings</h1>
+        <p className="text-gray-400">Manage your profile and preferences</p>
       </div>
 
       <form
@@ -113,15 +113,15 @@ const Settings = () => {
         className="grid grid-cols-1 lg:grid-cols-2 gap-6"
       >
         {/* Profile Settings */}
-        <div className="bg-white p-6 rounded-lg shadow">
-          <h2 className="text-xl font-semibold text-gray-800 mb-4">
+        <div className="bg-dark-700 p-6 rounded-lg shadow border border-dark-600">
+          <h2 className="text-xl font-semibold text-white mb-4">
             Profile Settings
           </h2>
 
           <div className="space-y-4">
             <div className="grid grid-cols-2 gap-4">
               <div>
-                <label className="block text-sm font-medium text-gray-700 mb-1">
+                <label className="block text-sm font-medium text-gray-300 mb-1">
                   First Name
                 </label>
                 <input
@@ -129,11 +129,11 @@ const Settings = () => {
                   name="firstName"
                   value={formData.firstName}
                   onChange={handleChange}
-                  className="w-full p-3 border border-gray-300 rounded-lg focus:ring-blue-500 focus:border-blue-500"
+                  className="w-full p-3 border border-dark-600 rounded-lg bg-dark-600 text-white focus:ring-primary-500 focus:border-primary-500"
                 />
               </div>
               <div>
-                <label className="block text-sm font-medium text-gray-700 mb-1">
+                <label className="block text-sm font-medium text-gray-300 mb-1">
                   Last Name
                 </label>
                 <input
@@ -141,13 +141,13 @@ const Settings = () => {
                   name="lastName"
                   value={formData.lastName}
                   onChange={handleChange}
-                  className="w-full p-3 border border-gray-300 rounded-lg focus:ring-blue-500 focus:border-blue-500"
+                  className="w-full p-3 border border-dark-600 rounded-lg bg-dark-600 text-white focus:ring-primary-500 focus:border-primary-500"
                 />
               </div>
             </div>
 
             <div>
-              <label className="block text-sm font-medium text-gray-700 mb-1">
+              <label className="block text-sm font-medium text-gray-300 mb-1">
                 Email
               </label>
               <input
@@ -155,13 +155,13 @@ const Settings = () => {
                 name="email"
                 value={formData.email}
                 onChange={handleChange}
-                className="w-full p-3 border border-gray-300 rounded-lg focus:ring-blue-500 focus:border-blue-500"
+                className="w-full p-3 border border-dark-600 rounded-lg bg-dark-600 text-white focus:ring-primary-500 focus:border-primary-500"
               />
             </div>
 
             <div className="grid grid-cols-2 gap-4">
               <div>
-                <label className="block text-sm font-medium text-gray-700 mb-1">
+                <label className="block text-sm font-medium text-gray-300 mb-1">
                   Age
                 </label>
                 <input
@@ -169,21 +169,25 @@ const Settings = () => {
                   name="age"
                   value={formData.age}
                   onChange={handleChange}
-                  className="w-full p-3 border border-gray-300 rounded-lg focus:ring-blue-500 focus:border-blue-500"
+                  className="w-full p-3 border border-dark-600 rounded-lg bg-dark-600 text-white focus:ring-primary-500 focus:border-primary-500"
                 />
               </div>
               <div>
-                <label className="block text-sm font-medium text-gray-700 mb-1">
+                <label className="block text-sm font-medium text-gray-300 mb-1">
                   Training Days
                 </label>
                 <select
                   name="trainingDays"
                   value={formData.trainingDays}
                   onChange={handleChange}
-                  className="w-full p-3 border border-gray-300 rounded-lg focus:ring-blue-500 focus:border-blue-500"
+                  className="w-full p-3 border border-dark-600 rounded-lg bg-dark-600 text-white focus:ring-primary-500 focus:border-primary-500"
                 >
                   {[1, 2, 3, 4, 5, 6, 7].map((num) => (
-                    <option key={num} value={num}>
+                    <option
+                      key={num}
+                      value={num}
+                      className="bg-dark-700 text-white"
+                    >
                       {num} days
                     </option>
                   ))}
@@ -193,7 +197,7 @@ const Settings = () => {
 
             <div className="grid grid-cols-2 gap-4">
               <div>
-                <label className="block text-sm font-medium text-gray-700 mb-1">
+                <label className="block text-sm font-medium text-gray-300 mb-1">
                   Height (cm)
                 </label>
                 <input
@@ -201,11 +205,11 @@ const Settings = () => {
                   name="height"
                   value={formData.height}
                   onChange={handleChange}
-                  className="w-full p-3 border border-gray-300 rounded-lg focus:ring-blue-500 focus:border-blue-500"
+                  className="w-full p-3 border border-dark-600 rounded-lg bg-dark-600 text-white focus:ring-primary-500 focus:border-primary-500"
                 />
               </div>
               <div>
-                <label className="block text-sm font-medium text-gray-700 mb-1">
+                <label className="block text-sm font-medium text-gray-300 mb-1">
                   Weight (kg)
                 </label>
                 <input
@@ -213,39 +217,47 @@ const Settings = () => {
                   name="weight"
                   value={formData.weight}
                   onChange={handleChange}
-                  className="w-full p-3 border border-gray-300 rounded-lg focus:ring-blue-500 focus:border-blue-500"
+                  className="w-full p-3 border border-dark-600 rounded-lg bg-dark-600 text-white focus:ring-primary-500 focus:border-primary-500"
                 />
               </div>
             </div>
 
             <div>
-              <label className="block text-sm font-medium text-gray-700 mb-1">
+              <label className="block text-sm font-medium text-gray-300 mb-1">
                 Fitness Goal
               </label>
               <select
                 name="fitnessGoal"
                 value={formData.fitnessGoal}
                 onChange={handleChange}
-                className="w-full p-3 border border-gray-300 rounded-lg focus:ring-blue-500 focus:border-blue-500"
+                className="w-full p-3 border border-dark-600 rounded-lg bg-dark-600 text-white focus:ring-primary-500 focus:border-primary-500"
               >
-                <option value="strength">Strength</option>
-                <option value="hypertrophy">Muscle Building</option>
-                <option value="endurance">Endurance</option>
-                <option value="weight_loss">Weight Loss</option>
+                <option value="strength" className="bg-dark-700 text-white">
+                  Strength
+                </option>
+                <option value="hypertrophy" className="bg-dark-700 text-white">
+                  Muscle Building
+                </option>
+                <option value="endurance" className="bg-dark-700 text-white">
+                  Endurance
+                </option>
+                <option value="weight_loss" className="bg-dark-700 text-white">
+                  Weight Loss
+                </option>
               </select>
             </div>
           </div>
         </div>
 
         {/* Reminder Settings */}
-        <div className="bg-white p-6 rounded-lg shadow">
-          <h2 className="text-xl font-semibold text-gray-800 mb-4">
+        <div className="bg-dark-700 p-6 rounded-lg shadow border border-dark-600">
+          <h2 className="text-xl font-semibold text-white mb-4">
             Reminder Settings
           </h2>
 
           <div className="space-y-6">
             {/* Protein Shake Reminder */}
-            <div className="border-b pb-4">
+            <div className="border-b border-dark-600 pb-4">
               <div className="flex items-center justify-between mb-3">
                 <label className="flex items-center">
                   <input
@@ -258,9 +270,9 @@ const Settings = () => {
                         e.target.checked
                       )
                     }
-                    className="h-4 w-4 text-blue-600 border-gray-300 rounded focus:ring-blue-500"
+                    className="h-4 w-4 text-primary-500 bg-dark-600 border-dark-500 rounded focus:ring-primary-500"
                   />
-                  <span className="ml-2 text-sm font-medium text-gray-700">
+                  <span className="ml-2 text-sm font-medium text-gray-300">
                     Protein Shake
                   </span>
                 </label>
@@ -272,8 +284,10 @@ const Settings = () => {
                     handleReminderChange("proteinShake", "time", e.target.value)
                   }
                   disabled={!reminders.proteinShake.enabled}
-                  className={`p-2 border border-gray-300 rounded-lg text-sm ${
-                    !reminders.proteinShake.enabled ? "bg-gray-100" : ""
+                  className={`p-2 border rounded-lg text-sm ${
+                    !reminders.proteinShake.enabled
+                      ? "bg-dark-700 text-gray-500 border-dark-600"
+                      : "bg-dark-600 text-white border-dark-500"
                   }`}
                 />
               </div>
@@ -283,7 +297,7 @@ const Settings = () => {
             </div>
 
             {/* Water Intake Reminder */}
-            <div className="border-b pb-4">
+            <div className="border-b border-dark-600 pb-4">
               <div className="flex items-center justify-between mb-3">
                 <label className="flex items-center">
                   <input
@@ -296,9 +310,9 @@ const Settings = () => {
                         e.target.checked
                       )
                     }
-                    className="h-4 w-4 text-blue-600 border-gray-300 rounded focus:ring-blue-500"
+                    className="h-4 w-4 text-primary-500 bg-dark-600 border-dark-500 rounded focus:ring-primary-500"
                   />
-                  <span className="ml-2 text-sm font-medium text-gray-700">
+                  <span className="ml-2 text-sm font-medium text-gray-300">
                     Water Intake
                   </span>
                 </label>
@@ -310,8 +324,10 @@ const Settings = () => {
                     handleReminderChange("waterIntake", "time", e.target.value)
                   }
                   disabled={!reminders.waterIntake.enabled}
-                  className={`p-2 border border-gray-300 rounded-lg text-sm ${
-                    !reminders.waterIntake.enabled ? "bg-gray-100" : ""
+                  className={`p-2 border rounded-lg text-sm ${
+                    !reminders.waterIntake.enabled
+                      ? "bg-dark-700 text-gray-500 border-dark-600"
+                      : "bg-dark-600 text-white border-dark-500"
                   }`}
                 />
               </div>
@@ -330,9 +346,9 @@ const Settings = () => {
                     onChange={(e) =>
                       handleReminderChange("sleep", "enabled", e.target.checked)
                     }
-                    className="h-4 w-4 text-blue-600 border-gray-300 rounded focus:ring-blue-500"
+                    className="h-4 w-4 text-primary-500 bg-dark-600 border-dark-500 rounded focus:ring-primary-500"
                   />
-                  <span className="ml-2 text-sm font-medium text-gray-700">
+                  <span className="ml-2 text-sm font-medium text-gray-300">
                     Sleep
                   </span>
                 </label>
@@ -344,8 +360,10 @@ const Settings = () => {
                     handleReminderChange("sleep", "time", e.target.value)
                   }
                   disabled={!reminders.sleep.enabled}
-                  className={`p-2 border border-gray-300 rounded-lg text-sm ${
-                    !reminders.sleep.enabled ? "bg-gray-100" : ""
+                  className={`p-2 border rounded-lg text-sm ${
+                    !reminders.sleep.enabled
+                      ? "bg-dark-700 text-gray-500 border-dark-600"
+                      : "bg-dark-600 text-white border-dark-500"
                   }`}
                 />
               </div>
@@ -357,31 +375,31 @@ const Settings = () => {
         </div>
 
         {/* Account Settings */}
-        <div className="bg-white p-6 rounded-lg shadow">
-          <h2 className="text-xl font-semibold text-gray-800 mb-4">
+        <div className="bg-dark-700 p-6 rounded-lg shadow border border-dark-600">
+          <h2 className="text-xl font-semibold text-white mb-4">
             Account Settings
           </h2>
 
           <div className="space-y-4">
             <div>
-              <label className="block text-sm font-medium text-gray-700 mb-1">
+              <label className="block text-sm font-medium text-gray-300 mb-1">
                 Change Password
               </label>
               <input
                 type="password"
                 placeholder="Enter new password"
-                className="w-full p-3 border border-gray-300 rounded-lg focus:ring-blue-500 focus:border-blue-500"
+                className="w-full p-3 border border-dark-600 rounded-lg bg-dark-600 text-white focus:ring-primary-500 focus:border-primary-500"
               />
             </div>
 
             <div>
-              <label className="block text-sm font-medium text-gray-700 mb-1">
+              <label className="block text-sm font-medium text-gray-300 mb-1">
                 Confirm New Password
               </label>
               <input
                 type="password"
                 placeholder="Confirm new password"
-                className="w-full p-3 border border-gray-300 rounded-lg focus:ring-blue-500 focus:border-blue-500"
+                className="w-full p-3 border border-dark-600 rounded-lg bg-dark-600 text-white focus:ring-primary-500 focus:border-primary-500"
               />
             </div>
 
@@ -398,7 +416,7 @@ const Settings = () => {
         <div className="flex items-end">
           <button
             type="submit"
-            className="w-full bg-blue-500 hover:bg-blue-600 text-white py-3 rounded-lg font-medium"
+            className="w-full bg-primary-500 hover:bg-primary-600 text-white py-3 rounded-lg font-medium"
           >
             Save Settings
           </button>
