@@ -520,36 +520,75 @@ const formatExercisesForFrontend = (schedule) => {
 };
 
 // Import the database connection
-const db = require('../config/database');
+const { promisePool: db } = require('../database/connection');
 const { generateWorkoutPlanWithAI } = require('../services/aiService');
 
 // Function to generate a new workout plan
 const generateWorkoutPlan = async (req, res) => {
   try {
     const { intensity, daysPerWeek, focusArea } = req.body;
-    const userId = req.user.id; // Assuming user ID comes from auth middleware
+    const userId = req.userId; // Changed from req.user.id to req.userId to match auth middleware
     
     // First, try to generate a plan using AI
     let workoutPlan;
     let usedFallback = false;
     
     try {
-      workoutPlan = await generateWorkoutPlanWithAI({ intensity, daysPerWeek, focusArea });
+      const aiResult = await generateWorkoutPlanWithAI({ intensity, daysPerWeek, focusArea });
+      if (!aiResult.success) {
+        console.warn('AI generation failed, using fallback:', aiResult.error || 'Unknown error');
+        // If AI fails, use the fallback
+        workoutPlan = createFallbackWorkoutPlan(intensity, daysPerWeek, focusArea);
+        usedFallback = true;
+      } else {
+        // Use the plan returned by AI
+        workoutPlan = aiResult.plan;
+        console.log("AI Generated Plan Structure:", {
+          hasWeeklySchedule: !!workoutPlan.weeklySchedule,
+          weeklyScheduleLength: workoutPlan.weeklySchedule?.length,
+          firstDay: workoutPlan.weeklySchedule?.[0],
+          muscleGroupsExample: workoutPlan.weeklySchedule?.[0]?.muscleGroups
+        });
+      }
     } catch (aiError) {
       console.warn('AI generation failed, using fallback:', aiError.message);
       // If AI fails, use the fallback
       workoutPlan = createFallbackWorkoutPlan(intensity, daysPerWeek, focusArea);
       usedFallback = true;
     }
+
+    // Log the workout plan for debugging
+    try {
+      console.log(
+        "Workout plan to be saved:",
+        JSON.stringify(workoutPlan, null, 2)
+      );
+    } catch (jsonError) {
+      console.error("Error stringifying workout plan:", jsonError);
+      console.log("Workout plan (non-stringified):", workoutPlan);
+    }
     
     // Save the workout plan to the database
-    const insertQuery = `INSERT INTO workout_plans (user_id, intensity, days_per_week, focus_area, plan_data, created_at) VALUES (?, ?, ?, ?, ?, NOW())`;
+    const insertQuery = `INSERT INTO workout_plans (user_id, name, training_type, days_per_week, body_part_focus, used_fallback, plan_data, created_at) VALUES (?, ?, ?, ?, ?, ?, ?, NOW())`;
+    // Prepare the plan data
+    let planDataJson;
+    try {
+      planDataJson = JSON.stringify(workoutPlan);
+    } catch (stringifyError) {
+      console.error("Failed to stringify workout plan:", stringifyError);
+      throw new Error("Failed to prepare workout plan for database storage");
+    }
+    
     const result = await db.execute(insertQuery, [
       userId,
-      intensity,
+      `${
+        intensity.charAt(0).toUpperCase() + intensity.slice(1)
+      } ${focusArea} Program`, // name
+      focusArea, // training_type
       daysPerWeek,
-      focusArea,
-      JSON.stringify(workoutPlan)
+      focusArea, // body_part_focus
+      usedFallback, // used_fallback
+      planDataJson,
     ]);
     
     // Return the generated plan
@@ -573,7 +612,7 @@ const generateWorkoutPlan = async (req, res) => {
 // Function to get the current workout plan for a user
 const getCurrentPlan = async (req, res) => {
   try {
-    const userId = req.user.id; // Assuming user ID comes from auth middleware
+    const userId = req.userId; // Changed from req.user.id to req.userId to match auth middleware
     
     // Get the most recent workout plan for the user
     const query = `SELECT * FROM workout_plans WHERE user_id = ? ORDER BY created_at DESC LIMIT 1`;
@@ -581,14 +620,31 @@ const getCurrentPlan = async (req, res) => {
     
     if (rows.length > 0) {
       const plan = rows[0];
-      plan.plan_data = JSON.parse(plan.plan_data);
+      
+      // Handle case where plan_data might already be parsed or is null
+      let parsedPlanData;
+      if (plan.plan_data === null || plan.plan_data === undefined) {
+        parsedPlanData = null;
+      } else if (typeof plan.plan_data === "object") {
+        // Already parsed
+        parsedPlanData = plan.plan_data;
+      } else {
+        // String that needs parsing
+        try {
+          parsedPlanData = JSON.parse(plan.plan_data);
+        } catch (parseError) {
+          console.error("Error parsing plan_data:", parseError);
+          parsedPlanData = null;
+        }
+      }
       
       res.json({
         success: true,
         data: {
-          plan: plan.plan_data,
+          plan: parsedPlanData,
           planId: plan.id,
-          createdAt: plan.created_at
+          createdAt: plan.created_at,
+          usedFallback: plan.used_fallback || false, // Add fallback status to response
         }
       });
     } else {
